@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "jsxImportSource": "@opentui/react",
+    "lib": ["ES2022", "DOM"],
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": ["src"],
+  "comment": "Los *.test.tsx de componentes corren bajo `bun test` (usan bun:test + el renderer nativo), no bajo tsc.",
+  "exclude": ["src/components/**/*.test.tsx"]
+}
