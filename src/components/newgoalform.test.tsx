@@ -33,4 +33,16 @@ describe("NewGoalForm", () => {
     expect(f).toContain("looply");                  // repo prellenado
     expect(f).toContain("arreglar el mcp del browser"); // objetivo prellenado
   });
+  it("muestra los runtimes nuevos (opencode/codex) cuando vienen prellenados", async () => {
+    const fo = await frameOf(
+      <NewGoalForm onCreate={async () => null} onCancel={() => {}} setRawMode={() => {}} tokenMissing={false} height={20} initial={{ runtime: "opencode" }} />,
+      90, 30,
+    );
+    expect(fo).toContain("opencode");
+    const fc = await frameOf(
+      <NewGoalForm onCreate={async () => null} onCancel={() => {}} setRawMode={() => {}} tokenMissing={false} height={20} initial={{ runtime: "codex" }} />,
+      90, 30,
+    );
+    expect(fc).toContain("codex");
+  });
 });

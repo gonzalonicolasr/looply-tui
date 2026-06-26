@@ -9,13 +9,15 @@ import { FolderPicker } from "./FolderPicker.tsx";
 type Field = "repo" | "objetivo" | "criterios" | "runtime" | "mode" | "model" | "effort";
 const FIELDS: Field[] = ["repo", "objetivo", "criterios", "runtime", "mode", "model", "effort"];
 const EFFORTS = ["", "minimal", "low", "medium", "high", "xhigh"];
+const RUNTIMES = ["pi", "claude", "opencode", "codex"] as const;
+type RuntimeName = (typeof RUNTIMES)[number];
 
 // Valores para prellenar el form al re-correr un goal existente (tecla `e`).
 export interface GoalFormInitial {
   repo?: string;
   objetivo?: string;
   criterios?: string[];
-  runtime?: "pi" | "claude";
+  runtime?: RuntimeName;
   mode?: "sdd" | "simple";
   model?: string;
   effort?: string;
@@ -32,7 +34,7 @@ export function NewGoalForm({ onCreate, onCancel, setRawMode, tokenMissing, heig
   const [repo, setRepo] = useState(initial?.repo ?? "");
   const [objetivo, setObjetivo] = useState(initial?.objetivo ?? "");
   const [criteria, setCriteria] = useState<string[]>(initial?.criterios ?? []);
-  const [rt, setRt] = useState<"pi" | "claude">(initial?.runtime ?? "pi");
+  const [rt, setRt] = useState<RuntimeName>(initial?.runtime ?? "pi");
   const [mode, setMode] = useState<"sdd" | "simple">(initial?.mode ?? "sdd");
   const [model, setModel] = useState(initial?.model ?? "");
   const [effort, setEffort] = useState(initial?.effort ?? "");
@@ -47,6 +49,8 @@ export function NewGoalForm({ onCreate, onCancel, setRawMode, tokenMissing, heig
     setField((f) => FIELDS[(FIELDS.indexOf(f) + dir + FIELDS.length) % FIELDS.length]);
   const cycleEffort = (dir: number) =>
     setEffort((e) => EFFORTS[(EFFORTS.indexOf(e) + dir + EFFORTS.length) % EFFORTS.length]);
+  const cycleRuntime = (dir: number) =>
+    setRt((r) => RUNTIMES[(RUNTIMES.indexOf(r) + dir + RUNTIMES.length) % RUNTIMES.length]);
 
   function submitDraft() {
     const v = draft.trim();
@@ -79,7 +83,7 @@ export function NewGoalForm({ onCreate, onCancel, setRawMode, tokenMissing, heig
     if (key.name === "tab") return move(key.shift ? -1 : 1);
     if (key.name === "up") return move(-1);
     if (key.name === "down") return move(1);
-    if (field === "runtime" && (key.name === "left" || key.name === "right")) return setRt((r) => (r === "pi" ? "claude" : "pi"));
+    if (field === "runtime" && (key.name === "left" || key.name === "right")) return cycleRuntime(key.name === "left" ? -1 : 1);
     if (field === "mode" && (key.name === "left" || key.name === "right")) return setMode((m) => (m === "sdd" ? "simple" : "sdd"));
     if (field === "effort" && (key.name === "left" || key.name === "right")) return cycleEffort(key.name === "left" ? -1 : 1);
     if (field === "repo" && (key.name === "return" || key.name === "e")) return setPicking(true);

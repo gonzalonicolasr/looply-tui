@@ -36,6 +36,8 @@ export function statusGlyph(status: string): string {
 export function runtime(rt: string): { color: string; glyph: string } {
   if (rt === "claude") return { color: "#d97757", glyph: "◆" };
   if (rt === "pi") return { color: "#10b981", glyph: "▲" };
+  if (rt === "opencode") return { color: "#38bdf8", glyph: "◇" };
+  if (rt === "codex") return { color: "#a78bfa", glyph: "✦" };
   return { color: "#a1a1aa", glyph: "•" };
 }
 
